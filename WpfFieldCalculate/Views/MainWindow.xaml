@@ -36,6 +36,7 @@
             <hc:ScrollViewer Grid.Row="0">
                 <DataGrid ItemsSource="{Binding InputData.Wires}"
                           SelectedItem="{Binding SelectedWire}"
+                          SelectionMode="Extended"
                           Style="{StaticResource DataGrid.Small}"
                           AutoGenerateColumns="False"
                           CanUserDeleteRows="False"
@@ -68,18 +69,13 @@
         <oxy:PlotView DockPanel.Dock="Top" Height="350"
                       ch:AspectRatioHelper.AspectRatio="5:3"
                       Background="Transparent"
-                      ZoomHorizontalCursor="Arrow"
-                      ZoomVerticalCursor="ArrowCD"
-                      Model="{Binding Grapf}"/>
+                      Model="{Binding Graph}"/>
 
 
         <DockPanel DockPanel.Dock="Bottom" Height="50">
 
             <Label Content="{Binding OutputData.InductionAbsSum}"/>
             <Label Content="{Binding OutputData.InductionDegSum}"/>
-
-
-
 
         </DockPanel>
 

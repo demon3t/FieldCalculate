@@ -1,11 +1,8 @@
-﻿using WpfFieldCalculate.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using OxyPlot;
 using System.Collections.ObjectModel;
+using System.Numerics;
+using System.Threading.Tasks;
+using WpfFieldCalculate.Infrastructure;
 
 namespace WpfFieldCalculate.Models
 {
@@ -16,21 +13,7 @@ namespace WpfFieldCalculate.Models
     {
         public InputData()
         {
-            Wires = new ObservableCollection<WireData>()
-            {
-                new WireData(200, new Point(-60, 100))
-                {
-                    Name = "Провод 1"
-                },
-                new WireData(-200, new Point(60, 100))
-                {
-                    Name = "Провод 2"
-                },
-                new WireData(0, new Point(0, 170))
-                {
-                    Name = "Провод 3",
-                },
-            };
+            Wires = new ObservableCollection<WireData>();
         }
 
         public ObservableCollection<WireData> Wires
@@ -40,5 +23,35 @@ namespace WpfFieldCalculate.Models
         }
 
         private ObservableCollection<WireData> _wires;
+
+
+        public void UpdateCoordinate()
+        {
+            Parallel.ForEach(Wires, (w, e) =>
+            {
+                w.Circle.Points[0] = new DataPoint(w.X, w.Y);
+                w.Mark.Points[0] = new DataPoint(w.X, w.Y);
+                w.Vector.Points[0] = new DataPoint(w.X, w.Y);
+                w.Arrow.EndPoint = new DataPoint(w.ToComplex.Real * 100000000, w.ToComplex.Imaginary * 100000000);
+            });
+        }
+
+        public void UpdateStyle()
+        {
+            Parallel.ForEach(Wires, (w, e) =>
+            {
+                w.Circle.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Circle.MarkerStroke = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Circle.TextColor = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Mark.MarkerType = w.I > 0 ? MarkerType.Cross : MarkerType.Circle;
+                w.Mark.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Mark.MarkerStroke = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Mark.TextColor = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Mark.MarkerFill = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+                w.Vector.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            });
+
+            
+        }
     }
 }

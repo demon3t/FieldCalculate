@@ -17,18 +17,27 @@ namespace WpfFieldCalculate.Models
 
         public static double GetDistance(this WireData wire)
         {
-            return Math.Sqrt(Math.Pow(wire.Coordinate.X, 2) + Math.Pow(wire.Coordinate.Y, 2));
+            return Math.Sqrt(Math.Pow(wire.X, 2) + Math.Pow(wire.Y, 2));
         }
 
         public static double GetDegree(this WireData wire)
         {
-            return Math.Atan(wire.Coordinate.Y / wire.Coordinate.X) * ToDegree;
+            return Math.Atan(wire.Y / wire.X) * ToDegree;
         }
 
         public static double GetRotatedDegree(this WireData wire)
         {
-            return wire.I == 0 ? GetDegree(wire) :
-                wire.I > 0 ? GetDegree(wire) - 90 : GetDegree(wire) + 90;
+            switch (wire.I)
+            {
+                case 0:
+                    {
+                        return 0;
+                    }
+                default:
+                    {
+                        return wire.GetDegree() + (wire.X < 0 ? -90 : 90);
+                    }
+            }
         }
 
         public static double GetInduction(this WireData wire)
@@ -42,7 +51,7 @@ namespace WpfFieldCalculate.Models
 
             foreach (var w in wires)
             {
-                result += w.ToCompex;
+                result += w.ToComplex;
             }
 
             return result.Magnitude;
@@ -54,7 +63,7 @@ namespace WpfFieldCalculate.Models
 
             foreach (var w in wires)
             {
-                result += w.ToCompex;
+                result += w.ToComplex;
             }
 
             return result.Phase * ToDegree;

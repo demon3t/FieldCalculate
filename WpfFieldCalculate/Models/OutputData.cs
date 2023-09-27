@@ -1,4 +1,7 @@
-﻿using System;
+﻿using HandyControl.Controls;
+using OxyPlot;
+using OxyPlot.Annotations;
+using System;
 using System.Numerics;
 using WpfFieldCalculate.Infrastructure;
 
@@ -15,30 +18,32 @@ namespace WpfFieldCalculate.Models
         {
             _inputData = inputData;
 
-            foreach (var w in _inputData.Wires)
-            {
-                w.PropertyChanged += (sender, e) =>
-                {
-                    Update();
-                };
-            }
-
-            Update();
         }
 
-        /// <summary>
-        /// Рассчитать данные.
-        /// </summary>
-        private void Update()
+        public ArrowAnnotation Arrow = new ArrowAnnotation
         {
-            foreach (var w in _inputData.Wires )
-            {
-                w.InductionAbs = w.GetInduction();
-                w.InductionDeg = w.GetRotatedDegree();
-            }
+            StartPoint = new DataPoint(0, 0),
+            EndPoint = new DataPoint(0, 0),
+            Color = OxyColors.Green,
+            StrokeThickness = 1.5,
+            HeadLength = 7,
+            HeadWidth = 2
+        };
 
+        public void Caculate()
+        {
             InductionAbsSum = Calculate.GetSummaryInduction(_inputData.Wires);
             InductionDegSum = Calculate.GetSummaryInductionDeg(_inputData.Wires);
+        }
+
+        public void UpdateCoordinate()
+        {
+            Arrow.EndPoint = new DataPoint(ToComplex.Real * 100000000, ToComplex.Imaginary * 100000000);
+        }
+
+        public void UpdateStyle()
+        {
+            Arrow.Color = InductionDegSum == 0 ? OxyColors.Transparent : OxyColors.Green;
         }
 
         /// <summary>
@@ -47,7 +52,10 @@ namespace WpfFieldCalculate.Models
         public double InductionAbsSum
         {
             get { return _inductionAbs; }
-            set { Set(ref _inductionAbs, value); }
+            set
+            {
+                Set(ref _inductionAbs, value);
+            }
         }
 
         private double _inductionAbs;
@@ -58,7 +66,10 @@ namespace WpfFieldCalculate.Models
         public double InductionDegSum
         {
             get { return _inductionDeg; }
-            set { Set(ref _inductionDeg, value); }
+            set
+            {
+                Set(ref _inductionDeg, value);
+            }
         }
 
         private double _inductionDeg;
