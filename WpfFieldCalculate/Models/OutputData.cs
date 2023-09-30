@@ -25,7 +25,7 @@ namespace WpfFieldCalculate.Models
             StartPoint = new DataPoint(0, 0),
             EndPoint = new DataPoint(0, 0),
             Color = OxyColors.Green,
-            StrokeThickness = 1.5,
+            StrokeThickness = 2,
             HeadLength = 7,
             HeadWidth = 2
         };
@@ -34,11 +34,14 @@ namespace WpfFieldCalculate.Models
         {
             InductionAbsSum = Calculate.GetSummaryInduction(_inputData.Wires);
             InductionDegSum = Calculate.GetSummaryInductionDeg(_inputData.Wires);
+            ToComplex = new(InductionAbsSum * Math.Cos(InductionDegSum * Calculate.ToRad), InductionAbsSum * Math.Sin(InductionDegSum * Calculate.ToRad));
         }
+
+
 
         public void UpdateCoordinate()
         {
-            Arrow.EndPoint = new DataPoint(ToComplex.Real * 100000000, ToComplex.Imaginary * 100000000);
+            Arrow.EndPoint = new DataPoint(ToComplex.Real * 1000000000000, ToComplex.Imaginary * 1000000000000);
         }
 
         public void UpdateStyle()
@@ -55,6 +58,7 @@ namespace WpfFieldCalculate.Models
             set
             {
                 Set(ref _inductionAbs, value);
+
             }
         }
 
@@ -74,7 +78,12 @@ namespace WpfFieldCalculate.Models
 
         private double _inductionDeg;
 
-        public Complex ToComplex =>
-            new(InductionAbsSum * Math.Cos(InductionDegSum * Calculate.ToRad), InductionAbsSum * Math.Sin(InductionDegSum * Calculate.ToRad));
+        public Complex ToComplex
+        {
+            get { return _toComplex; }
+            set { Set(ref _toComplex, value); }
+        }
+
+        private Complex _toComplex;
     }
 }

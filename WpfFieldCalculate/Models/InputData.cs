@@ -32,7 +32,7 @@ namespace WpfFieldCalculate.Models
                 w.Circle.Points[0] = new DataPoint(w.X, w.Y);
                 w.Mark.Points[0] = new DataPoint(w.X, w.Y);
                 w.Vector.Points[0] = new DataPoint(w.X, w.Y);
-                w.Arrow.EndPoint = new DataPoint(w.ToComplex.Real * 100000000, w.ToComplex.Imaginary * 100000000);
+                w.Arrow.EndPoint = new DataPoint(w.ToComplex.Real * 1000000000000, w.ToComplex.Imaginary * 1000000000000);
             });
         }
 
@@ -50,8 +50,19 @@ namespace WpfFieldCalculate.Models
                 w.Mark.MarkerFill = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
                 w.Vector.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
             });
+        }
 
-            
+        public void UpdateStyle(WireData w)
+        {
+            w.Circle.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Circle.MarkerStroke = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Circle.TextColor = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Mark.MarkerType = w.I > 0 ? MarkerType.Cross : MarkerType.Circle;
+            w.Mark.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Mark.MarkerStroke = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Mark.TextColor = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Mark.MarkerFill = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
+            w.Vector.Color = w.I == 0 ? OxyColors.LightGray : OxyColors.Black;
         }
     }
 }

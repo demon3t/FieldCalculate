@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using WpfFieldCalculate.Models;
+﻿using Window = HandyControl.Controls.Window;
 
 namespace WpfFieldCalculate.Views
 {

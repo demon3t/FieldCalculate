@@ -8,8 +8,10 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using WpfFieldCalculate.Infrastructure;
@@ -70,7 +72,7 @@ namespace WpfFieldCalculate.ViewModels
             };
         }
 
-        
+
 
         /// <summary>
         /// Инициализация команд.
@@ -80,6 +82,7 @@ namespace WpfFieldCalculate.ViewModels
             AddWireCommand = new RelayCommand(OnAddWireCommandExecuted, CanAddWireCommandExecute);
             DeleteWireCommand = new RelayCommand(OnDeleteWireCommandExecuted, CanDeleteWireCommandExecute);
             UpdateCommand = new RelayCommand(OnUpdateCommandExecuted, CanUpdateCommandExecute);
+            EscapeCommand = new RelayCommand(OnEscapeCommandExecuted, CanEscapeCommandExecute);
         }
 
         /// <summary>
@@ -107,7 +110,26 @@ namespace WpfFieldCalculate.ViewModels
         /// <summary>
         /// Выбранная запись.
         /// </summary>
-        public WireData SelectedWire { get; set; }
+        public WireData SelectedWire
+        { 
+            get{ return _selectedWire; }
+            set
+            {
+                if (_selectedWire != null)
+                {
+                    _selectedWire.OnUnselecteted();
+                }
+
+                if (value != null)
+                {
+                    value.OnSelecteted();
+                }
+
+                Set(ref _selectedWire, value);
+            }
+        }
+
+        private WireData _selectedWire;
 
         /// <summary>
         /// Входные данные.
@@ -174,6 +196,22 @@ namespace WpfFieldCalculate.ViewModels
             Graph.Axes[1].Minimum = newYMin;
         }
 
+        #region EscapeCommand
+
+        public ICommand EscapeCommand { get; private set; }
+
+        private bool CanEscapeCommandExecute(object p)
+        {
+            return true;
+        }
+
+        private void OnEscapeCommandExecuted(object p)
+        {
+            SelectedWire = null;
+        }
+
+        #endregion
+
         #region Обновить данные
 
         public ICommand UpdateCommand { get; private set; }
@@ -211,26 +249,20 @@ namespace WpfFieldCalculate.ViewModels
         {
             var r = new Random();
 
-            for (int i = 0; i < 1; i++)
+            var wire = new WireData(Graph, InputData)
             {
-                var wire = new WireData(r.Next(-200, 200), new Point(r.Next(-200, 200), r.Next(-200, 200)))
-                {
-                    Name = $"Провод {InputData.Wires.Count + 1}"
-                };
+                I = r.Next(-200, 200),
+                X = r.Next(-200, 200),
+                Y = r.Next(-200, 200),
+                Name = $"Провод {InputData.Wires.Count + 1}"
+            };
 
-                InputData.Wires.Add(wire);
+            InputData.Wires.Add(wire);
 
-                Graph.Series.Add(wire.Vector);
-                Graph.Series.Add(wire.Circle);
-                Graph.Series.Add(wire.Mark);
-                Graph.Annotations.Add(wire.Arrow);
-
-                wire.PropertyChanged += (sender, e) =>
-                {
-                    UpdateCommand?.Execute(null);
-                };
-            }
-            
+            wire.PropertyChanged += (sender, e) =>
+            {
+                UpdateCommand?.Execute(null);
+            };
 
             UpdateCommand?.Execute(null);
         }
