@@ -41,7 +41,7 @@ namespace WpfFieldCalculate.Models
 
         public void UpdateCoordinate()
         {
-            Arrow.EndPoint = new DataPoint(ToComplex.Real * 1000000000000, ToComplex.Imaginary * 1000000000000);
+            Arrow.EndPoint = new DataPoint(ToComplex.Real * 10000000000, ToComplex.Imaginary * 10000000000);
         }
 
         public void UpdateStyle()

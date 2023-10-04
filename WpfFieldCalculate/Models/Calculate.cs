@@ -17,7 +17,7 @@ namespace WpfFieldCalculate.Models
 
         public static double GetDistance(this WireData wire)
         {
-            return Math.Sqrt(Math.Pow(wire.X * 100, 2) + Math.Pow(wire.Y * 100, 2));
+            return Math.Sqrt(Math.Pow(wire.X, 2) + Math.Pow(wire.Y, 2));
         }
 
         public static double GetDegree(this WireData wire)

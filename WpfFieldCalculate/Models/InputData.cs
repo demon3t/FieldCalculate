@@ -32,7 +32,7 @@ namespace WpfFieldCalculate.Models
                 w.Circle.Points[0] = new DataPoint(w.X, w.Y);
                 w.Mark.Points[0] = new DataPoint(w.X, w.Y);
                 w.Vector.Points[0] = new DataPoint(w.X, w.Y);
-                w.Arrow.EndPoint = new DataPoint(w.ToComplex.Real * 1000000000000, w.ToComplex.Imaginary * 1000000000000);
+                w.Arrow.EndPoint = new DataPoint(w.ToComplex.Real * 10000000000, w.ToComplex.Imaginary * 10000000000);
             });
         }
 
