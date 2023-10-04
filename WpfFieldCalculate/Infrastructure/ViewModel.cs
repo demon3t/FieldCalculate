@@ -9,7 +9,7 @@ namespace WpfFieldCalculate.Infrastructure
     public abstract class ViewModel : INotifyPropertyChanged
     {
         /// <summary>
-        /// Событие изменения свойства.
+        /// Событие изменения свойства.ы
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
